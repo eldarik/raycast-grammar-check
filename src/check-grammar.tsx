@@ -6,11 +6,34 @@ import { homedir } from "os";
 import { join } from "path";
 
 function findClaudePath(): string {
-  try {
-    return execSync("which claude", { encoding: "utf-8" }).trim();
-  } catch {
-    return "claude"; // fallback to PATH
+  const { existsSync } = require("fs");
+  const home = homedir();
+
+  // Common locations where claude might be installed
+  const commonPaths = [
+    `${home}/.local/bin/claude`,
+    `${home}/.asdf/shims/claude`,
+    "/usr/local/bin/claude",
+    "/opt/homebrew/bin/claude",
+  ];
+
+  // Check common paths first
+  for (const path of commonPaths) {
+    if (existsSync(path)) {
+      return path;
+    }
   }
+
+  // Try which command
+  try {
+    const result = execSync("which claude", { encoding: "utf-8", stdio: ["pipe", "pipe", "ignore"] }).trim();
+    if (result) return result;
+  } catch {
+    // which failed, continue to error below
+  }
+
+  // No claude found
+  throw new Error("Claude CLI not found. Please ensure it's installed and in PATH.");
 }
 
 const CLAUDE_PATH = findClaudePath();
@@ -142,6 +165,9 @@ export default function Command() {
         console.log("[Grammar Check Extension] runClaude returned, length:", result.length);
         setCorrected(result);
         setState("done");
+        // Auto-copy corrected text to clipboard
+        await Clipboard.copy(result);
+        await showToast({ style: Toast.Style.Success, title: "Corrected text copied to clipboard" });
       } catch (e) {
         console.log("[Grammar Check Extension] runClaude failed:", e instanceof Error ? e.message : String(e));
         setState("error");
