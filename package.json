@@ -1,0 +1,35 @@
+{
+  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "name": "grammar-check",
+  "title": "Grammar Check",
+  "description": "Check grammar and style of selected or clipboard text using the Claude Code CLI",
+  "icon": "extension-icon.png",
+  "author": "eldar",
+  "categories": [
+    "Productivity"
+  ],
+  "license": "MIT",
+  "commands": [
+    {
+      "name": "check-grammar",
+      "title": "Check Grammar & Style",
+      "subtitle": "Claude Code",
+      "description": "Runs selected or clipboard text through Claude Code CLI to check grammar and style",
+      "mode": "view"
+    }
+  ],
+  "dependencies": {
+    "@raycast/api": "latest",
+    "@raycast/utils": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "dotenv-cli": "^11.0.0",
+    "typescript": "^5.4"
+  },
+  "scripts": {
+    "build": "ray build",
+    "dev": "dotenv ray develop"
+  }
+}
