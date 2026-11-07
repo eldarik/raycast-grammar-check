@@ -42,7 +42,7 @@ const PROMPT =
 
 function loadEnv(): Record<string, string> {
   try {
-    const envPath = join(homedir(), "projects/raycast-extensions/grammar-check/.env");
+    const envPath = join(homedir(), "projects/raycast-grammar-check/.env");
     const content = readFileSync(envPath, "utf-8");
     const env: Record<string, string> = {};
     content.split("\n").forEach((line) => {
